@@ -9,7 +9,7 @@ document.querySelectorAll('.exp-header').forEach(header => {
 });
 
 const bulgariaClock = document.querySelector('[data-bulgaria-clock] .clock-time');
-const themeToggle = document.querySelector('[data-theme-toggle]');
+const themeToggles = document.querySelectorAll('[data-theme-toggle]');
 const themeLogos = document.querySelectorAll('[data-theme-logo]');
 const menuToggle = document.querySelector('[data-menu-toggle]');
 const mobileNav = document.querySelector('[data-mobile-nav]');
@@ -20,11 +20,14 @@ if (savedTheme === 'light') {
 }
 
 function updateThemeToggleLabel() {
-    if (!themeToggle) {
+    if (!themeToggles.length) {
         return;
     }
 
-    themeToggle.textContent = document.body.classList.contains('light-mode') ? 'Dark' : 'Light';
+    const label = document.body.classList.contains('light-mode') ? 'Dark' : 'Light';
+    themeToggles.forEach(toggle => {
+        toggle.textContent = label;
+    });
 }
 
 function updateThemeLogos() {
@@ -35,7 +38,7 @@ function updateThemeLogos() {
     });
 }
 
-if (themeToggle) {
+themeToggles.forEach(themeToggle => {
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         localStorage.setItem(
@@ -45,7 +48,7 @@ if (themeToggle) {
         updateThemeToggleLabel();
         updateThemeLogos();
     });
-}
+});
 
 updateThemeToggleLabel();
 updateThemeLogos();
