@@ -79,12 +79,14 @@ p{
 /* HEADER */
 
 header{
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns:auto 1fr auto auto;
     align-items:center;
+    gap:1rem 1.5rem;
     margin-bottom:3rem;
     padding-bottom:2rem;
     border-bottom:1px solid var(--border);
+    position:relative;
 }
 
 .logo{
@@ -98,13 +100,6 @@ header{
     width:14rem;
     max-width:70%;
     height:auto;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:1.5rem;
-    margin-left:auto;
 }
 
 .nav-theme-toggle{
@@ -137,6 +132,12 @@ header{
 }
 
 /* NAVIGATION */
+
+nav{
+    display:flex;
+    align-items:center;
+    justify-self:end;
+}
 
 nav a{
     margin-left:1.875rem;
@@ -182,6 +183,7 @@ nav a:hover::after{
     color:var(--clock-text);
     font-size:0.88rem;
     white-space:nowrap;
+    justify-self:end;
 }
 
 .clock-label{
@@ -772,13 +774,11 @@ section{
     }
 
     header{
-        display:grid;
-        grid-template-columns:auto 1fr;
+        grid-template-columns:auto 1fr auto;
         align-items:center;
         gap:0.9rem 1rem;
         margin-bottom:2.25rem;
         padding-bottom:1.2rem;
-        position:relative;
     }
 
     .logo img{
@@ -786,23 +786,13 @@ section{
         max-width:100%;
     }
 
-    .header-right{
-        display:grid;
-        grid-template-columns:auto;
-        justify-items:end;
-        align-items:start;
-        gap:0.7rem;
-        grid-column:2;
-        grid-row:1;
-        margin-left:0;
-    }
-
     .menu-toggle{
         display:inline-flex;
         align-items:center;
         justify-content:center;
+        grid-column:3;
+        grid-row:1;
         justify-self:end;
-        align-self:center;
         min-width:2.8rem;
         min-height:2.8rem;
     }
@@ -822,6 +812,7 @@ section{
         right:0;
         width:auto;
         max-width:100%;
+        justify-self:stretch;
         z-index:30;
         box-shadow:0 1rem 2.5rem rgba(0, 0, 0, 0.22);
         backdrop-filter:blur(10px);
@@ -851,7 +842,9 @@ section{
     }
 
     .header-clock{
-        justify-self:end;
+        grid-column:1 / -1;
+        grid-row:2;
+        justify-self:start;
     }
 
     .nav-theme-toggle{
@@ -859,11 +852,7 @@ section{
         align-items:center;
         justify-content:center;
         margin-top:0.3rem;
-        margin-left:0.75rem;
-    }
-
-    .header-right > .theme-toggle:not(.nav-theme-toggle){
-        display:none;
+        margin-left:0;
     }
 
     h2{
@@ -923,10 +912,6 @@ section{
     header{
         margin-bottom:2rem;
         padding-bottom:1rem;
-    }
-
-    .header-right{
-        gap:0.6rem;
     }
 
     nav{
