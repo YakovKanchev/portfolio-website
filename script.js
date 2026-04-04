@@ -11,6 +11,8 @@ document.querySelectorAll('.exp-header').forEach(header => {
 const bulgariaClock = document.querySelector('[data-bulgaria-clock] .clock-time');
 const themeToggle = document.querySelector('[data-theme-toggle]');
 const themeLogos = document.querySelectorAll('[data-theme-logo]');
+const menuToggle = document.querySelector('[data-menu-toggle]');
+const mobileNav = document.querySelector('[data-mobile-nav]');
 const savedTheme = localStorage.getItem('portfolio-theme');
 
 if (savedTheme === 'light') {
@@ -47,6 +49,13 @@ if (themeToggle) {
 
 updateThemeToggleLabel();
 updateThemeLogos();
+
+if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+        const isOpen = mobileNav.classList.toggle('is-open');
+        menuToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+}
 
 function updateBulgariaClock() {
     if (!bulgariaClock) {

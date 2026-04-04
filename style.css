@@ -107,6 +107,21 @@ header{
     margin-left:auto;
 }
 
+.menu-toggle{
+    display:none;
+    padding:0.45rem 0.8rem;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--surface-5);
+    color:var(--text);
+    font:inherit;
+    cursor:pointer;
+}
+
+.menu-toggle:hover{
+    color:var(--accent);
+}
+
 /* NAVIGATION */
 
 nav a{
@@ -198,6 +213,18 @@ section{
     box-sizing:border-box;
     border:1px solid var(--border);
     position:relative;
+}
+
+.testing-projects .card{
+    background-image:
+        radial-gradient(circle at 14% 18%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 22%),
+        radial-gradient(circle at 82% 24%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 20%),
+        radial-gradient(circle at 68% 82%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 24%),
+        linear-gradient(color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--text) 7%, transparent) 1px, transparent 1px);
+    background-size:auto, auto, auto, 2.6rem 2.6rem, 2.6rem 2.6rem;
+    background-position:0 0, 0 0, 0 0, 0 0, 0 0;
+    background-repeat:no-repeat, no-repeat, no-repeat, repeat, repeat;
 }
 
 /* TERMINAL DOTS */
@@ -304,6 +331,10 @@ section{
     border-top:1px solid var(--border-soft);
 }
 
+.testing-projects .exp-item + .exp-item{
+    border-top:none;
+}
+
 .exp-toggle{
     color:var(--accent);
     font-size:1.25rem;
@@ -364,6 +395,7 @@ section{
     overflow:hidden;
     background:var(--surface-2);
 }
+
 
 .repo-topbar{
     display:flex;
@@ -729,6 +761,8 @@ section{
         flex-direction:column;
         align-items:flex-start;
         gap:1rem;
+        margin-bottom:2.25rem;
+        padding-bottom:1.2rem;
     }
 
     .logo img{
@@ -740,12 +774,14 @@ section{
         width:100%;
         flex-wrap:wrap;
         gap:0.85rem;
+        justify-content:flex-start;
     }
 
     nav{
         display:flex;
         flex-wrap:wrap;
         gap:0.9rem 1.25rem;
+        width:100%;
     }
 
     nav a{
@@ -757,8 +793,24 @@ section{
         font-size:0.82rem;
     }
 
+    .theme-toggle{
+        order:2;
+    }
+
+    .header-clock{
+        order:3;
+    }
+
+    h2{
+        font-size:1.2rem;
+    }
+
     .exp-role{
         font-size:1.25rem;
+    }
+
+    .exp-header{
+        gap:0.75rem;
     }
 
     .repo-file-row{
@@ -769,10 +821,24 @@ section{
         max-width:48%;
     }
 
+    .repo-topbar{
+        gap:0.85rem;
+    }
+
+    .repo-description,
+    .repo-tags,
+    .repo-stats,
+    .repo-files,
+    .repo-readme{
+        padding-left:1rem;
+        padding-right:1rem;
+    }
+
     .code-modal-panel{
         width:calc(100vw - 1rem);
         max-height:calc(100vh - 1rem);
         margin:0.5rem auto;
+        border-radius:0.9rem;
     }
 }
 
@@ -796,18 +862,71 @@ section{
 
     .header-right{
         align-items:flex-start;
+        gap:0.7rem;
+        position:relative;
+    }
+
+    .menu-toggle{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        order:1;
     }
 
     nav{
         width:100%;
+        gap:0.65rem 0.95rem;
+        order:4;
+        display:none;
+        flex-direction:column;
+        align-items:flex-start;
+        padding:0.9rem 1rem;
+        border:1px solid var(--border);
+        border-radius:1rem;
+        background:var(--surface);
+    }
+
+    nav.is-open{
+        display:flex;
+    }
+
+    nav a{
+        font-size:0.92rem;
+        width:100%;
+    }
+
+    .theme-toggle{
+        order:2;
     }
 
     .header-clock{
         order:3;
     }
 
+    .theme-toggle,
+    .header-clock{
+        padding:0.42rem 0.72rem;
+    }
+
     .card{
         padding:1.1rem;
+    }
+
+    section{
+        margin-bottom:2rem;
+    }
+
+    .about .card::before,
+    .experience .card::before,
+    .terminal-card .card::before{
+        font-size:0.78rem;
+        margin-bottom:0.85rem;
+    }
+
+    .about .card::after,
+    .experience .card::after,
+    .terminal-card .card::after{
+        display:none;
     }
 
     .about .card::after{
@@ -847,11 +966,13 @@ section{
     .repo-stats{
         gap:0.55rem;
         flex-direction:column;
+        font-size:0.86rem;
     }
 
     .repo-file-row{
         flex-direction:column;
         align-items:flex-start;
+        padding:0.65rem 0;
     }
 
     .repo-file-note{
@@ -865,10 +986,20 @@ section{
 
     .exp-content{
         padding-left:1.2rem;
+        font-size:0.98rem;
     }
 
     .code-modal-header{
         padding:0.85rem 0.9rem;
+    }
+
+    .code-modal-title{
+        font-size:0.98rem;
+    }
+
+    .code-modal-close{
+        min-width:2rem;
+        height:2rem;
     }
 
     .code-modal-filebar{
@@ -884,5 +1015,75 @@ section{
         grid-template-columns:2.2rem 1fr;
         gap:0.75rem;
         padding:0 0.8rem;
+    }
+}
+
+@media (max-width: 480px){
+    .container{
+        padding:0.85rem 0.7rem 1.2rem;
+    }
+
+    .logo img{
+        width:9.8rem;
+    }
+
+    h2{
+        font-size:1.05rem;
+        letter-spacing:0.04rem;
+    }
+
+    p{
+        font-size:0.92rem;
+        line-height:1.55;
+    }
+
+    .exp-role{
+        font-size:1.08rem;
+    }
+
+    .exp-meta{
+        font-size:0.9rem;
+    }
+
+    .repo-name{
+        font-size:1rem;
+    }
+
+    .repo-tags{
+        gap:0.45rem;
+    }
+
+    .repo-tags span{
+        font-size:0.75rem;
+        padding:0.24rem 0.58rem;
+    }
+
+    .repo-files-title{
+        margin-bottom:0.7rem;
+    }
+
+    .repo-file-group-title{
+        font-size:0.76rem;
+    }
+
+    .code-modal-panel{
+        width:calc(100vw - 0.5rem);
+        max-height:calc(100vh - 0.5rem);
+        margin:0.25rem auto;
+        border-radius:0.7rem;
+    }
+
+    .code-modal-body{
+        max-height:calc(100vh - 8rem);
+    }
+
+    .code-modal-code{
+        font-size:0.76rem;
+    }
+
+    .code-line{
+        grid-template-columns:2rem 1fr;
+        gap:0.6rem;
+        padding:0 0.65rem;
     }
 }
