@@ -860,8 +860,8 @@ section{
         margin-left:0;
     }
 
-    .desktop-theme-toggle{
-        display:none;
+    header > .desktop-theme-toggle{
+        display:none !important;
     }
 
     h2{
