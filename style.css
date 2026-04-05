@@ -598,22 +598,6 @@ section{
     z-index:50;
 }
 
-.code-modal.is-visible .code-modal-backdrop{
-    animation:modal-backdrop-in 0.22s ease-out;
-}
-
-.code-modal.is-visible .code-modal-panel{
-    animation:modal-panel-in 0.26s ease-out;
-}
-
-.code-modal.is-closing .code-modal-backdrop{
-    animation:modal-backdrop-out 0.2s ease-in forwards;
-}
-
-.code-modal.is-closing .code-modal-panel{
-    animation:modal-panel-out 0.22s ease-in forwards;
-}
-
 .code-modal-backdrop{
     position:absolute;
     inset:0;
@@ -634,50 +618,6 @@ section{
     display:flex;
     flex-direction:column;
     box-shadow:0 1.5rem 4rem rgba(0, 0, 0, 0.45);
-}
-
-@keyframes modal-backdrop-in{
-    from{
-        opacity:0;
-    }
-
-    to{
-        opacity:1;
-    }
-}
-
-@keyframes modal-panel-in{
-    from{
-        opacity:0;
-        transform:translateY(16px) scale(0.985);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-}
-
-@keyframes modal-backdrop-out{
-    from{
-        opacity:1;
-    }
-
-    to{
-        opacity:0;
-    }
-}
-
-@keyframes modal-panel-out{
-    from{
-        opacity:1;
-        transform:translateY(0) scale(1);
-    }
-
-    to{
-        opacity:0;
-        transform:translateY(14px) scale(0.985);
-    }
 }
 
 .code-modal-header{

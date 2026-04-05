@@ -172,8 +172,6 @@ function showCodeModal(fileName, content) {
 
     codeModal.classList.remove('is-closing', 'is-visible');
     codeModal.hidden = false;
-    void codeModal.offsetWidth;
-    codeModal.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
 }
 
@@ -233,19 +231,18 @@ function closeCodeModal() {
         return;
     }
 
-    if (codeModal.hidden || codeModal.classList.contains('is-closing')) {
+    if (codeModal.hidden) {
         return;
     }
 
-    codeModal.classList.remove('is-visible');
-    codeModal.classList.add('is-closing');
-
-    codeModalCloseTimeout = setTimeout(() => {
-        codeModal.hidden = true;
-        codeModal.classList.remove('is-closing');
-        document.body.style.overflow = '';
+    if (codeModalCloseTimeout) {
+        clearTimeout(codeModalCloseTimeout);
         codeModalCloseTimeout = null;
-    }, 220);
+    }
+
+    codeModal.hidden = true;
+    codeModal.classList.remove('is-closing', 'is-visible');
+    document.body.style.overflow = '';
 }
 
 document.addEventListener('click', event => {
