@@ -169,6 +169,9 @@ function runAboutTyping() {
 
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         aboutTypingText.textContent = fullText;
+        if (window.sessionStorage) {
+            window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
+        }
         revealHomeSections();
         return;
     }
