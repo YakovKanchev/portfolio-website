@@ -83,7 +83,6 @@ const codeModal = document.getElementById('code-modal');
 const codeModalTitle = document.getElementById('code-modal-title');
 const codeModalFilebar = document.getElementById('code-modal-filebar');
 const codeModalCode = document.getElementById('code-modal-code');
-const codeTriggers = document.querySelectorAll('[data-code-path]');
 let codeModalCloseTimeout = null;
 let activeCodeRequest = 0;
 
@@ -175,8 +174,9 @@ function showCodeModal(fileName, content) {
 
 async function openCodeModal(button) {
     const filePath = button.dataset.codePath;
+    const targetId = button.dataset.codeTarget;
 
-    if (!filePath || !codeModal || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
+    if (!codeModal || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
         return;
     }
 
@@ -185,8 +185,23 @@ async function openCodeModal(button) {
 
     showCodeModal(fileName, '// Loading file...');
 
+    if (!filePath && targetId) {
+        const source = document.getElementById(targetId);
+
+        if (source) {
+            showCodeModal(fileName, source.textContent);
+            return;
+        }
+    }
+
+    if (!filePath) {
+        showCodeModal(fileName, '// File preview is unavailable right now.');
+        return;
+    }
+
     try {
-        const response = await fetch(filePath, { cache: 'no-store' });
+        const fileUrl = new URL(filePath, window.location.href);
+        const response = await fetch(fileUrl.toString(), { cache: 'no-store' });
 
         if (!response.ok) {
             throw new Error('Unable to load file');
@@ -228,8 +243,15 @@ function closeCodeModal() {
     }, 220);
 }
 
-codeTriggers.forEach(button => {
-    button.addEventListener('click', () => openCodeModal(button));
+document.addEventListener('click', event => {
+    const button = event.target.closest('[data-code-path], [data-code-target]');
+
+    if (!button) {
+        return;
+    }
+
+    event.preventDefault();
+    openCodeModal(button);
 });
 
 document.querySelectorAll('[data-close-code-modal]').forEach(element => {
