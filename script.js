@@ -84,6 +84,44 @@ function updateBulgariaClock() {
 updateBulgariaClock();
 setInterval(updateBulgariaClock, 1000);
 
+const aboutTypingText = document.querySelector('.about .card p');
+
+function runAboutTyping() {
+    if (!aboutTypingText) {
+        return;
+    }
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
+    const fullText = aboutTypingText.textContent.replace(/\s+/g, ' ').trim();
+
+    if (!fullText) {
+        return;
+    }
+
+    let index = 0;
+    aboutTypingText.textContent = '';
+    aboutTypingText.classList.add('typing-text', 'is-typing');
+
+    const typeNextCharacter = () => {
+        index += 1;
+        aboutTypingText.textContent = fullText.slice(0, index);
+
+        if (index < fullText.length) {
+            window.setTimeout(typeNextCharacter, 28);
+            return;
+        }
+
+        aboutTypingText.classList.remove('is-typing');
+    };
+
+    window.setTimeout(typeNextCharacter, 180);
+}
+
+runAboutTyping();
+
 const codeModal = document.getElementById('code-modal');
 const codeModalTitle = document.getElementById('code-modal-title');
 const codeModalFilebar = document.getElementById('code-modal-filebar');
@@ -263,5 +301,61 @@ document.querySelectorAll('[data-close-code-modal]').forEach(element => {
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
         closeCodeModal();
+    }
+});
+
+const imageModal = document.getElementById('image-modal');
+const imageModalTitle = document.getElementById('image-modal-title');
+const imageModalView = document.getElementById('image-modal-view');
+
+function openImageModal(button) {
+    if (!imageModal || !imageModalTitle || !imageModalView) {
+        return;
+    }
+
+    const imagePath = button.dataset.imageModalTarget;
+    const imageLabel = button.dataset.imageModalLabel || 'Image preview';
+
+    if (!imagePath) {
+        return;
+    }
+
+    imageModalTitle.textContent = imageLabel;
+    imageModalView.src = imagePath;
+    imageModalView.alt = imageLabel;
+    imageModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    if (!imageModal || imageModal.hidden) {
+        return;
+    }
+
+    imageModal.hidden = true;
+    if (imageModalView) {
+        imageModalView.src = '';
+        imageModalView.alt = '';
+    }
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('click', event => {
+    const imageButton = event.target.closest('[data-image-modal-target]');
+
+    if (imageButton) {
+        event.preventDefault();
+        openImageModal(imageButton);
+        return;
+    }
+});
+
+document.querySelectorAll('[data-close-image-modal]').forEach(element => {
+    element.addEventListener('click', closeImageModal);
+});
+
+document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+        closeImageModal();
     }
 });

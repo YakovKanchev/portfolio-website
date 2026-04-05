@@ -25,7 +25,7 @@
     <nav data-mobile-nav>
         <a href="index.html" class="is-active">About</a>
         <a href="softwaretesting.html">SoftwareTesting</a>
-        <a href="#">Design</a>
+        <a href="design.html">Design</a>
         <button class="theme-toggle nav-theme-toggle" type="button" data-theme-toggle aria-label="Toggle light mode">Light</button>
     </nav>
 
@@ -43,9 +43,51 @@
 
     <div class="card">
         <p>
-            I am a beginner developer with interest in web development,
-            software testing and design. Currently building my first portfolio.
+            IT professional transitioning into QA with a strong focus on system thinking, root cause analysis, and improving reliability through better testing practices.
+
         </p>
+    </div>
+</section>
+
+<section class="technologies">
+    <h2>Technologies</h2>
+
+    <div class="card">
+        <div class="tech-group">
+            <div class="tech-label">Testing</div>
+            <div class="tech-tags">
+                <span>Java</span>
+                <span>Selenium</span>
+                <span>TestNG</span>
+                <span>JUnit</span>
+                <span>Maven</span>
+                <span>RestAssured</span>
+                <span>Postman</span>
+                <span>XPath</span>
+                <span>CSS</span>
+                <span>HTML</span>
+            </div>
+        </div>
+
+        <div class="tech-group">
+            <div class="tech-label">Systems</div>
+            <div class="tech-tags">
+                <span>MySQL</span>
+                <span>DBeaver</span>
+                <span>Linux</span>
+                <span>PUTTY</span>
+            </div>
+        </div>
+
+        <div class="tech-group">
+            <div class="tech-label">Workflow</div>
+            <div class="tech-tags">
+                <span>Git/GitHub</span>
+                <span>Monday</span>
+                <span>CRM</span>
+                <span>Graylog</span>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -63,8 +105,16 @@
                 </div>
             </div>
             <div class="exp-content">
-                <p>Worked on UI improvements</p>
-                <p>Used HTML, CSS, JavaScript</p>
+                <ul class="exp-list">
+                    <li>Restructured issue escalation process to the dev team using a more technical, structured approach.</li>
+                    <li>Improved clarity and quality of bug reports, helping drive faster resolution cycles.</li>
+                    <li>Created onboarding documentation for new team members, reducing ramp-up time.</li>
+                    <li>Optimized ticket handling by prioritizing issues based on impact and urgency.</li>
+                    <li>Distributed workload across the team to improve response time and efficiency.</li>
+                    <li>Performed log analysis, system monitoring, and issue diagnosis.</li>
+                    <li>Documented reproducible steps and supported root cause analysis.</li>
+                    <li>Worked closely with QA and developers to validate fixes and retest releases.</li>
+                </ul>
             </div>
         </div>
 
@@ -85,6 +135,77 @@
     </div>
 </section>
 
+<section class="education">
+    <h2>Education</h2>
+
+    <div class="card">
+        <div class="exp-item">
+            <div class="exp-header">
+                <span class="exp-toggle">+</span>
+                <div class="exp-heading">
+                    <div class="exp-role">Pragmatic LLC</div>
+                    <div class="exp-meta">QA Complete</div>
+                </div>
+            </div>
+            <div class="exp-content">
+                <ul class="exp-list">
+                    <li>Designed and executed manual test cases based on functional and nonfunctional requirements.</li>
+                    <li>Created and ran automated UI tests using Java, Selenium, TestNG, and JUnit.</li>
+                    <li>Performed API testing using Postman and RestAssured, verifying response structures, status codes, and error handling.</li>
+                    <li>Practiced basic MySQL queries to retrieve and inspect data for testing purposes.</li>
+                    <li>Gained introductory experience with BDD concepts and Cucumber for behavior-driven testing scenarios.</li>
+                    <li>Used Linux for file navigation, viewing logs, and checking application/service status during testing.</li>
+                    <li>Logged and tracked defects using Jira.</li>
+                    <li>Applied version control through Git/GitHub for managing test scripts and documentation.</li>
+                </ul>
+                <button class="certificate-trigger" type="button" data-image-modal-target="qa-complete-certificate.jpeg" data-image-modal-label="QA Complete Certificate">
+                    <img src="qa-complete-certificate.jpeg" alt="QA Complete certificate preview">
+                    <span>Open Certificate</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <span class="exp-toggle">+</span>
+                <div class="exp-heading">
+                    <div class="exp-role">SoftUni</div>
+                    <div class="exp-meta">Graphic Design Advanced</div>
+                </div>
+            </div>
+            <div class="exp-content">
+                <p>Graphic Design Advanced</p>
+            </div>
+        </div>
+
+        <div class="exp-item">
+            <div class="exp-header">
+                <span class="exp-toggle">+</span>
+                <div class="exp-heading">
+                    <div class="exp-role">Technical College Gabrovo</div>
+                    <div class="exp-meta">High School Diploma</div>
+                </div>
+            </div>
+            <div class="exp-content">
+                <p>High School Diploma</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+</div>
+
+<div class="image-modal" id="image-modal" hidden>
+    <div class="image-modal-backdrop" data-close-image-modal></div>
+    <div class="image-modal-panel" role="dialog" aria-modal="true" aria-labelledby="image-modal-title">
+        <div class="image-modal-header">
+            <h3 class="image-modal-title" id="image-modal-title">Certificate</h3>
+            <button class="image-modal-close" type="button" aria-label="Close certificate preview" data-close-image-modal>X</button>
+        </div>
+        <div class="image-modal-body">
+            <img id="image-modal-view" src="" alt="">
+        </div>
+    </div>
 </div>
 
 <script src="script.js?v=20260405"></script>
