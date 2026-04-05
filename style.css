@@ -21,7 +21,7 @@
     --code-text:#b8bec9;
     --code-line:#5f6673;
     --code-comment:#6a717d;
-    --file-icon-filter:invert(1);
+    --file-icon:url("Icon_Dark.svg");
 }
 
 body.light-mode{
@@ -45,7 +45,7 @@ body.light-mode{
     --code-text:#2c2c2c;
     --code-line:#8b8b8b;
     --code-comment:#7a7a7a;
-    --file-icon-filter:none;
+    --file-icon:url("Icon_Light.svg");
 }
 
 /* BODY */
@@ -565,11 +565,10 @@ section{
     height:0.95rem;
     display:inline-block;
     flex:0 0 auto;
-    background-image:url("file-icon.png");
+    background-image:var(--file-icon);
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    filter:var(--file-icon-filter);
     opacity:0.9;
 }
 
