@@ -47,6 +47,11 @@ themeToggles.forEach(themeToggle => {
         );
         updateThemeToggleLabel();
         updateThemeLogos();
+
+        if (menuToggle && mobileNav && mobileNav.classList.contains('is-open')) {
+            mobileNav.classList.remove('is-open');
+            menuToggle.setAttribute('aria-expanded', 'false');
+        }
     });
 });
 
