@@ -618,7 +618,7 @@ section{
     position:absolute;
     inset:0;
     background:var(--overlay);
-    backdrop-filter:blur(3px);
+    backdrop-filter:blur(1.5px);
 }
 
 .code-modal-panel{
@@ -848,7 +848,7 @@ section{
         justify-self:stretch;
         z-index:30;
         box-shadow:0 1rem 2.5rem rgba(0, 0, 0, 0.22);
-        backdrop-filter:blur(10px);
+        backdrop-filter:blur(3px);
     }
 
     nav.is-open{
