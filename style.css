@@ -418,6 +418,22 @@ body.home-intro-ready .reveal-after-about{
     pointer-events:auto;
 }
 
+body.page-sections-pending .reveal-on-load{
+    opacity:0;
+    transform:translateY(18px);
+    pointer-events:none;
+}
+
+.reveal-on-load{
+    transition:opacity 0.45s ease, transform 0.45s ease;
+}
+
+body.page-sections-ready .reveal-on-load{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
 /* EXPERIENCE */
 
 .exp-header{
@@ -432,6 +448,24 @@ body.home-intro-ready .reveal-after-about{
 
 .exp-header:hover{
     color:var(--accent);
+}
+
+.exp-header-static{
+    cursor:default;
+    margin-top:0;
+}
+
+.exp-header-static:hover{
+    color:inherit;
+}
+
+.education .exp-item:first-child .exp-header{
+    margin-top:0.4rem;
+}
+
+.education .exp-item + .exp-item{
+    margin-top:1.25rem;
+    padding-top:1.25rem;
 }
 
 .exp-item + .exp-item{
