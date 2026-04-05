@@ -1,10 +1,35 @@
 document.querySelectorAll('.exp-header').forEach(header => {
+    const item = header.parentElement;
+    const content = item.querySelector('.exp-content');
+    const toggle = header.querySelector('.exp-toggle');
+
+    if (item.classList.contains('is-open') && content) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        if (toggle) {
+            toggle.textContent = '-';
+        }
+    }
+
     header.addEventListener('click', () => {
-        const item = header.parentElement;
-        const toggle = header.querySelector('.exp-toggle');
+        const content = item.querySelector('.exp-content');
         const isOpen = item.classList.toggle('is-open');
 
-        toggle.textContent = isOpen ? '-' : '+';
+        if (toggle) {
+            toggle.textContent = isOpen ? '-' : '+';
+        }
+
+        if (!content) {
+            return;
+        }
+
+        if (isOpen) {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+            content.style.maxHeight = content.scrollHeight + 'px';
+            window.requestAnimationFrame(() => {
+                content.style.maxHeight = '0px';
+            });
+        }
     });
 });
 
@@ -85,19 +110,66 @@ updateBulgariaClock();
 setInterval(updateBulgariaClock, 1000);
 
 const aboutTypingText = document.querySelector('.about .card p');
+const deferredHomeSections = document.querySelectorAll('.reveal-after-about');
+const aboutIntroSessionKey = 'about-intro-complete';
+
+function revealHomeSections() {
+    if (!deferredHomeSections.length) {
+        return;
+    }
+
+    document.body.classList.remove('home-intro-pending');
+
+    deferredHomeSections.forEach((section, index) => {
+        window.setTimeout(() => {
+            if (index === deferredHomeSections.length - 1) {
+                document.body.classList.add('home-intro-ready');
+                return;
+            }
+
+            section.style.opacity = '1';
+            section.style.transform = 'translateY(0)';
+            section.style.pointerEvents = 'auto';
+        }, index * 120);
+    });
+
+    window.setTimeout(() => {
+        document.body.classList.add('home-intro-ready');
+        deferredHomeSections.forEach(section => {
+            section.style.opacity = '';
+            section.style.transform = '';
+            section.style.pointerEvents = '';
+        });
+    }, deferredHomeSections.length * 120);
+}
 
 function runAboutTyping() {
     if (!aboutTypingText) {
         return;
     }
 
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        return;
+    if (deferredHomeSections.length) {
+        document.body.classList.add('home-intro-pending');
+        document.body.classList.remove('home-intro-ready');
     }
 
     const fullText = aboutTypingText.textContent.replace(/\s+/g, ' ').trim();
 
     if (!fullText) {
+        revealHomeSections();
+        return;
+    }
+
+    if (window.sessionStorage && window.sessionStorage.getItem(aboutIntroSessionKey) === 'done') {
+        aboutTypingText.textContent = fullText;
+        aboutTypingText.classList.remove('typing-text', 'is-typing');
+        revealHomeSections();
+        return;
+    }
+
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        aboutTypingText.textContent = fullText;
+        revealHomeSections();
         return;
     }
 
@@ -115,6 +187,10 @@ function runAboutTyping() {
         }
 
         aboutTypingText.classList.remove('is-typing');
+        if (window.sessionStorage) {
+            window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
+        }
+        revealHomeSections();
     };
 
     window.setTimeout(typeNextCharacter, 180);

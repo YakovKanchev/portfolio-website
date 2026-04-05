@@ -172,20 +172,16 @@ nav a::after{
     position:absolute;
     left:0;
     bottom:-4px;
-    width:0%;
+    width:0;
     height:2px;
     background:#ffd500;
     background:var(--accent);
-    transition:width 0.2s ease;
+    transition:none;
 }
 
 nav a:hover::after,
 nav a:focus-visible::after{
-    width:0%;
-}
-
-nav a.is-active::after{
-    width:100%;
+    width:0;
 }
 
 .header-clock{
@@ -406,6 +402,22 @@ section{
     animation:blink-cursor 0.95s steps(1, end) infinite;
 }
 
+body.home-intro-pending .reveal-after-about{
+    opacity:0;
+    transform:translateY(18px);
+    pointer-events:none;
+}
+
+.reveal-after-about{
+    transition:opacity 0.45s ease, transform 0.45s ease;
+}
+
+body.home-intro-ready .reveal-after-about{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
 /* EXPERIENCE */
 
 .exp-header{
@@ -456,11 +468,15 @@ section{
 }
 
 .exp-content{
-    display:none;
+    display:block;
     margin-top:0.75rem;
     padding-left:1.6rem;
     font-size:1.05rem;
     color:var(--text-soft);
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+    transition:max-height 0.32s ease, opacity 0.24s ease;
 }
 
 .exp-content p + p{
@@ -477,7 +493,7 @@ section{
 }
 
 .exp-item.is-open .exp-content{
-    display:block;
+    opacity:1;
 }
 
 .certificate-trigger{
