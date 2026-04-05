@@ -83,8 +83,9 @@ const codeModal = document.getElementById('code-modal');
 const codeModalTitle = document.getElementById('code-modal-title');
 const codeModalFilebar = document.getElementById('code-modal-filebar');
 const codeModalCode = document.getElementById('code-modal-code');
-const codeTriggers = document.querySelectorAll('[data-code-target]');
+const codeTriggers = document.querySelectorAll('[data-code-path]');
 let codeModalCloseTimeout = null;
+let activeCodeRequest = 0;
 
 function escapeHtml(value) {
     return value
@@ -142,22 +143,16 @@ function renderHighlightedLine(line, fileName) {
     return highlightJava(line);
 }
 
-function openCodeModal(button) {
-    const targetId = button.dataset.codeTarget;
-    const source = document.getElementById(targetId);
-
-    if (!codeModal || !source || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
+function showCodeModal(fileName, content) {
+    if (!codeModal || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
         return;
     }
 
-    const fileName = button.dataset.fileLabel || button.querySelector('.repo-file-name')?.textContent || 'File preview';
-    const codeLines = source.textContent.split('\n');
-
     codeModalTitle.textContent = fileName;
     codeModalFilebar.textContent = 'API_Testing_Java_Yakov / ' + fileName;
+    const codeLines = content.replace(/\r\n/g, '\n').split('\n');
     codeModalCode.innerHTML = codeLines.map((line, index) => {
-        const trimmedLine = line.replace(/^\d+(?:  )?/, '');
-        const highlightedCode = renderHighlightedLine(trimmedLine, fileName);
+        const highlightedCode = renderHighlightedLine(line, fileName);
 
         return '<div class="code-line"><span class="code-line-number">' +
             String(index + 1) +
@@ -176,6 +171,41 @@ function openCodeModal(button) {
     void codeModal.offsetWidth;
     codeModal.classList.add('is-visible');
     document.body.style.overflow = 'hidden';
+}
+
+async function openCodeModal(button) {
+    const filePath = button.dataset.codePath;
+
+    if (!filePath || !codeModal || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
+        return;
+    }
+
+    const fileName = button.dataset.fileLabel || button.querySelector('.repo-file-name')?.textContent || 'File preview';
+    const requestId = ++activeCodeRequest;
+
+    showCodeModal(fileName, '// Loading file...');
+
+    try {
+        const response = await fetch(filePath, { cache: 'no-store' });
+
+        if (!response.ok) {
+            throw new Error('Unable to load file');
+        }
+
+        const content = await response.text();
+
+        if (requestId !== activeCodeRequest) {
+            return;
+        }
+
+        showCodeModal(fileName, content);
+    } catch (error) {
+        if (requestId !== activeCodeRequest) {
+            return;
+        }
+
+        showCodeModal(fileName, '// File preview is unavailable right now.');
+    }
 }
 
 function closeCodeModal() {
