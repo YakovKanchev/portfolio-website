@@ -34,54 +34,8 @@ document.querySelectorAll('.exp-header').forEach(header => {
 });
 
 const bulgariaClock = document.querySelector('[data-bulgaria-clock] .clock-time');
-const themeToggles = document.querySelectorAll('[data-theme-toggle]');
-const themeLogos = document.querySelectorAll('[data-theme-logo]');
 const menuToggle = document.querySelector('[data-menu-toggle]');
 const mobileNav = document.querySelector('[data-mobile-nav]');
-const savedTheme = localStorage.getItem('portfolio-theme');
-
-if (savedTheme === 'light') {
-    document.body.classList.add('light-mode');
-}
-
-function updateThemeToggleLabel() {
-    if (!themeToggles.length) {
-        return;
-    }
-
-    const label = document.body.classList.contains('light-mode') ? 'Dark' : 'Light';
-    themeToggles.forEach(toggle => {
-        toggle.textContent = label;
-    });
-}
-
-function updateThemeLogos() {
-    const isLight = document.body.classList.contains('light-mode');
-
-    themeLogos.forEach(logo => {
-        logo.src = isLight ? logo.dataset.lightLogo : logo.dataset.darkLogo;
-    });
-}
-
-themeToggles.forEach(themeToggle => {
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('light-mode');
-        localStorage.setItem(
-            'portfolio-theme',
-            document.body.classList.contains('light-mode') ? 'light' : 'dark'
-        );
-        updateThemeToggleLabel();
-        updateThemeLogos();
-
-        if (menuToggle && mobileNav && mobileNav.classList.contains('is-open')) {
-            mobileNav.classList.remove('is-open');
-            menuToggle.setAttribute('aria-expanded', 'false');
-        }
-    });
-});
-
-updateThemeToggleLabel();
-updateThemeLogos();
 
 if (menuToggle && mobileNav) {
     menuToggle.addEventListener('click', () => {
@@ -109,10 +63,15 @@ function updateBulgariaClock() {
 updateBulgariaClock();
 setInterval(updateBulgariaClock, 1000);
 
+const aboutSection = document.querySelector('.reveal-home-about');
 const aboutTypingText = document.querySelector('.about .card p');
 const deferredHomeSections = document.querySelectorAll('.reveal-after-about');
 const aboutIntroSessionKey = 'about-intro-complete';
 const deferredPageSections = document.querySelectorAll('.reveal-on-load');
+
+function prefersReducedMotion() {
+    return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
 function runAfterInitialPaint(callback) {
     window.requestAnimationFrame(() => {
@@ -168,6 +127,35 @@ function revealHomeSections() {
     });
 }
 
+function revealAboutSection(callback) {
+    if (!aboutSection || document.body.classList.contains('home-about-ready')) {
+        if (callback) {
+            callback();
+        }
+        return;
+    }
+
+    if (prefersReducedMotion()) {
+        document.body.classList.remove('home-about-pending');
+        document.body.classList.add('home-about-ready');
+        if (callback) {
+            callback();
+        }
+        return;
+    }
+
+    runAfterInitialPaint(() => {
+        document.body.classList.remove('home-about-pending');
+        document.body.classList.add('home-about-ready');
+
+        window.setTimeout(() => {
+            if (callback) {
+                callback();
+            }
+        }, 140);
+    });
+}
+
 function runAboutTyping() {
     if (!aboutTypingText) {
         return;
@@ -181,47 +169,49 @@ function runAboutTyping() {
     const fullText = aboutTypingText.textContent.replace(/\s+/g, ' ').trim();
 
     if (!fullText) {
-        revealHomeSections();
+        revealAboutSection(revealHomeSections);
         return;
     }
 
     if (window.sessionStorage && window.sessionStorage.getItem(aboutIntroSessionKey) === 'done') {
         aboutTypingText.textContent = fullText;
         aboutTypingText.classList.remove('typing-text', 'is-typing');
-        revealHomeSections();
+        revealAboutSection(revealHomeSections);
         return;
     }
 
-    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (prefersReducedMotion()) {
         aboutTypingText.textContent = fullText;
         if (window.sessionStorage) {
             window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
         }
-        revealHomeSections();
+        revealAboutSection(revealHomeSections);
         return;
     }
 
-    let index = 0;
-    aboutTypingText.textContent = '';
-    aboutTypingText.classList.add('typing-text', 'is-typing');
+    revealAboutSection(() => {
+        let index = 0;
+        aboutTypingText.textContent = '';
+        aboutTypingText.classList.add('typing-text', 'is-typing');
 
-    const typeNextCharacter = () => {
-        index += 1;
-        aboutTypingText.textContent = fullText.slice(0, index);
+        const typeNextCharacter = () => {
+            index += 1;
+            aboutTypingText.textContent = fullText.slice(0, index);
 
-        if (index < fullText.length) {
-            window.setTimeout(typeNextCharacter, 28);
-            return;
-        }
+            if (index < fullText.length) {
+                window.setTimeout(typeNextCharacter, 28);
+                return;
+            }
 
-        aboutTypingText.classList.remove('is-typing');
-        if (window.sessionStorage) {
-            window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
-        }
-        revealHomeSections();
-    };
+            aboutTypingText.classList.remove('is-typing');
+            if (window.sessionStorage) {
+                window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
+            }
+            revealHomeSections();
+        };
 
-    window.setTimeout(typeNextCharacter, 180);
+        window.setTimeout(typeNextCharacter, 120);
+    });
 }
 
 runAboutTyping();
