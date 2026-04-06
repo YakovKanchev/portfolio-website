@@ -969,6 +969,7 @@ body.page-sections-ready .reveal-on-load{
 
 .code-modal-code{
     padding:0.75rem 0;
+    padding-right:1rem;
     font-family:"Consolas","Courier New",monospace;
     tab-size:4;
     font-size:0.93rem;
