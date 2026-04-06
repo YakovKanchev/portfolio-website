@@ -20,11 +20,11 @@ public abstract class BaseTest {
         webApp = new WebApp(driver);
     }
 
-//    @AfterMethod
-//    public void tearDown() {
-//        if (driver != null) {
-//            browserTool.quitBrowser(driver);
-//        }
-//        driver = null;
-//    }
+   @AfterMethod
+   public void tearDown() {
+       if (driver != null) {
+           browserTool.quitBrowser(driver);
+       }
+       driver = null;
+   }
 }

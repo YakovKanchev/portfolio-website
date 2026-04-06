@@ -28,7 +28,7 @@ public class CreatedAccountSuccessPage extends BasePage {
         String expectedText = "Your Account Has Been Created!";
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.textToBe(SUCCESS_HEADER_TEXT, expectedText)); // тук си помогнах бая онлайн, не ми се получаваха нещата
+        wait.until(ExpectedConditions.textToBe(SUCCESS_HEADER_TEXT, expectedText));
 
         return textFieldForApproval.getText();
     }
