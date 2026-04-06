@@ -258,6 +258,7 @@ section{
 /* TERMINAL DOTS */
 
 .about .card::before,
+.technologies .card::before,
 .education .card::before,
 .experience .card::before,
 .terminal-card .card::before{
@@ -276,6 +277,7 @@ section{
 }
 
 .about .card::after,
+.technologies .card::after,
 .education .card::after,
 .experience .card::after,
 .terminal-card .card::after{
@@ -294,6 +296,14 @@ section{
 
 .education .card::after{
     left:calc(1.5rem + 28ch);
+}
+
+.technologies .card::before{
+    content:"yakov@portfolio:~$ technologies";
+}
+
+.technologies .card::after{
+    left:calc(1.5rem + 31ch);
 }
 
 .experience .card::before{
@@ -1249,6 +1259,7 @@ body.page-sections-ready .reveal-on-load{
     }
 
     .about .card::before,
+    .technologies .card::before,
     .education .card::before,
     .experience .card::before,
     .terminal-card .card::before{
@@ -1257,6 +1268,7 @@ body.page-sections-ready .reveal-on-load{
     }
 
     .about .card::after,
+    .technologies .card::after,
     .education .card::after,
     .experience .card::after,
     .terminal-card .card::after{
@@ -1269,6 +1281,10 @@ body.page-sections-ready .reveal-on-load{
 
     .education .card::after{
         left:calc(1.1rem + 28ch);
+    }
+
+    .technologies .card::after{
+        left:calc(1.1rem + 31ch);
     }
 
     .experience .card::after{
