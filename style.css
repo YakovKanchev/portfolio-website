@@ -762,7 +762,7 @@ body.page-sections-ready .reveal-on-load{
 .design-grid{
     display:grid;
     grid-template-columns:repeat(12, minmax(0, 1fr));
-    gap:0.85rem;
+    gap:1rem;
 }
 
 .design-tile{
@@ -770,7 +770,7 @@ body.page-sections-ready .reveal-on-load{
     margin:0;
     display:flex;
     flex-direction:column;
-    gap:0.8rem;
+    gap:0.7rem;
 }
 
 .design-tile-large{
@@ -839,19 +839,23 @@ body.page-sections-ready .reveal-on-load{
     overflow:hidden;
     cursor:pointer;
     touch-action:manipulation;
+    background:var(--surface-4);
 }
 
 .design-image{
     display:block;
     width:100%;
-    min-height:13rem;
+    height:100%;
     object-fit:cover;
     transition:transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-.design-tile-large .design-image{
-    min-height:18rem;
-}
+.design-media-portrait{ aspect-ratio: 4 / 5; }
+.design-media-portrait-soft{ aspect-ratio: 10 / 11; }
+.design-media-square{ aspect-ratio: 1 / 1; }
+.design-media-landscape{ aspect-ratio: 4 / 3; }
+.design-media-wide{ aspect-ratio: 16 / 9; }
+.design-media-process{ aspect-ratio: 16 / 10; }
 
 .design-tile:hover .design-image{
     transform:scale(1.03);
@@ -998,8 +1002,8 @@ body.page-sections-ready .reveal-on-load{
 .image-modal-panel{
     position:relative;
     z-index:1;
-    width:min(1000px, calc(100vw - 2rem));
-    max-height:calc(100vh - 2rem);
+    width:min(1120px, calc(100vw - 2rem));
+    height:min(calc(100vh - 2rem), 880px);
     margin:1rem auto;
     background:var(--surface-2);
     border:1px solid var(--border);
@@ -1058,13 +1062,15 @@ body.page-sections-ready .reveal-on-load{
     display:flex;
     align-items:center;
     justify-content:center;
+    min-height:0;
+    flex:1 1 auto;
 }
 
 .image-modal-body img{
     display:block;
-    width:100%;
+    width:auto;
     max-width:100%;
-    max-height:calc(100vh - 10rem);
+    max-height:100%;
     height:auto;
     border-radius:0.7rem;
     border:1px solid var(--border-soft);
@@ -1073,17 +1079,15 @@ body.page-sections-ready .reveal-on-load{
 }
 
 .image-modal.is-zoomed .image-modal-body{
-    overflow:auto;
-    align-items:flex-start;
-    justify-content:flex-start;
+    overflow:hidden;
 }
 
 .image-modal.is-zoomed .image-modal-body img{
-    max-width:none;
-    max-height:none;
+    max-width:100%;
+    max-height:100%;
     cursor:zoom-out;
-    transform:scale(1.6);
-    transform-origin:top left;
+    transform:scale(1.18);
+    transform-origin:center;
 }
 
 .code-line{
@@ -1265,14 +1269,14 @@ body.page-sections-ready .reveal-on-load{
 
     .image-modal-panel{
         width:calc(100vw - 1rem);
-        max-height:calc(100vh - 1rem);
+        height:calc(100vh - 1rem);
         margin:0.5rem auto;
         border-radius:0.9rem;
     }
 
     .design-grid{
         grid-template-columns:repeat(8, minmax(0, 1fr));
-        gap:0.8rem;
+        gap:0.85rem;
     }
 
     .design-tile,
@@ -1420,7 +1424,7 @@ body.page-sections-ready .reveal-on-load{
 
     .design-grid{
         grid-template-columns:1fr;
-        gap:0.9rem;
+        gap:1rem;
     }
 
     .design-tile,
@@ -1429,18 +1433,12 @@ body.page-sections-ready .reveal-on-load{
         grid-column:auto;
     }
 
-    .design-art,
-    .design-art-1,
-    .design-art-4{
-        min-height:11rem;
-    }
-
-    .design-image,
-    .design-tile-large .design-image{
-        min-height:0;
-        height:auto;
-        object-fit:contain;
-    }
+    .design-media-portrait{ aspect-ratio: 4 / 5; }
+    .design-media-portrait-soft{ aspect-ratio: 4 / 5; }
+    .design-media-square{ aspect-ratio: 1 / 1; }
+    .design-media-landscape{ aspect-ratio: 5 / 4; }
+    .design-media-wide{ aspect-ratio: 4 / 3; }
+    .design-media-process{ aspect-ratio: 4 / 3; }
 
     .design-tile figcaption{
         flex-direction:column;
@@ -1585,9 +1583,23 @@ body.page-sections-ready .reveal-on-load{
 
     .image-modal-panel{
         width:calc(100vw - 0.5rem);
-        max-height:calc(100vh - 0.5rem);
+        height:calc(100vh - 0.5rem);
         margin:0.25rem auto;
         border-radius:0.7rem;
+    }
+
+    .image-modal-actions{
+        gap:0.45rem;
+    }
+
+    .image-modal-zoom,
+    .image-modal-close{
+        min-width:2rem;
+        height:2rem;
+    }
+
+    .image-modal-zoom{
+        padding:0 0.65rem;
     }
 
     .code-modal-body{
