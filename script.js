@@ -402,6 +402,27 @@ document.addEventListener('keydown', event => {
 const imageModal = document.getElementById('image-modal');
 const imageModalTitle = document.getElementById('image-modal-title');
 const imageModalView = document.getElementById('image-modal-view');
+const imageModalZoomButton = document.querySelector('[data-image-modal-zoom]');
+
+document.querySelectorAll('[data-image-modal-target]').forEach(element => {
+    if (element.tagName !== 'BUTTON') {
+        element.setAttribute('role', 'button');
+        element.setAttribute('tabindex', '0');
+    }
+});
+
+function setImageModalZoom(isZoomed) {
+    if (!imageModal) {
+        return;
+    }
+
+    imageModal.classList.toggle('is-zoomed', isZoomed);
+
+    if (imageModalZoomButton) {
+        imageModalZoomButton.textContent = isZoomed ? 'Fit' : 'Zoom';
+        imageModalZoomButton.setAttribute('aria-label', isZoomed ? 'Fit image to screen' : 'Zoom image');
+    }
+}
 
 function openImageModal(button) {
     if (!imageModal || !imageModalTitle || !imageModalView) {
@@ -418,6 +439,7 @@ function openImageModal(button) {
     imageModalTitle.textContent = imageLabel;
     imageModalView.src = imagePath;
     imageModalView.alt = imageLabel;
+    setImageModalZoom(false);
     imageModal.hidden = false;
     document.body.style.overflow = 'hidden';
 }
@@ -428,6 +450,7 @@ function closeImageModal() {
     }
 
     imageModal.hidden = true;
+    setImageModalZoom(false);
     if (imageModalView) {
         imageModalView.src = '';
         imageModalView.alt = '';
@@ -445,9 +468,38 @@ document.addEventListener('click', event => {
     }
 });
 
+document.addEventListener('keydown', event => {
+    const imageButton = event.target.closest('[data-image-modal-target]');
+
+    if (!imageButton) {
+        return;
+    }
+
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openImageModal(imageButton);
+    }
+});
+
 document.querySelectorAll('[data-close-image-modal]').forEach(element => {
     element.addEventListener('click', closeImageModal);
 });
+
+if (imageModalZoomButton) {
+    imageModalZoomButton.addEventListener('click', () => {
+        setImageModalZoom(!imageModal.classList.contains('is-zoomed'));
+    });
+}
+
+if (imageModalView) {
+    imageModalView.addEventListener('click', () => {
+        if (!imageModal || imageModal.hidden) {
+            return;
+        }
+
+        setImageModalZoom(!imageModal.classList.contains('is-zoomed'));
+    });
+}
 
 document.addEventListener('keydown', event => {
     if (event.key === 'Escape') {
