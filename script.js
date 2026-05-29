@@ -161,57 +161,15 @@ function runAboutTyping() {
         return;
     }
 
-    if (deferredHomeSections.length) {
-        document.body.classList.add('home-intro-pending');
-        document.body.classList.remove('home-intro-ready');
-    }
-
     const fullText = aboutTypingText.textContent.replace(/\s+/g, ' ').trim();
+    aboutTypingText.textContent = fullText;
+    aboutTypingText.classList.remove('typing-text', 'is-typing');
 
-    if (!fullText) {
-        revealAboutSection(revealHomeSections);
-        return;
+    if (window.sessionStorage) {
+        window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
     }
 
-    if (window.sessionStorage && window.sessionStorage.getItem(aboutIntroSessionKey) === 'done') {
-        aboutTypingText.textContent = fullText;
-        aboutTypingText.classList.remove('typing-text', 'is-typing');
-        revealAboutSection(revealHomeSections);
-        return;
-    }
-
-    if (prefersReducedMotion()) {
-        aboutTypingText.textContent = fullText;
-        if (window.sessionStorage) {
-            window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
-        }
-        revealAboutSection(revealHomeSections);
-        return;
-    }
-
-    revealAboutSection(() => {
-        let index = 0;
-        aboutTypingText.textContent = '';
-        aboutTypingText.classList.add('typing-text', 'is-typing');
-
-        const typeNextCharacter = () => {
-            index += 1;
-            aboutTypingText.textContent = fullText.slice(0, index);
-
-            if (index < fullText.length) {
-                window.setTimeout(typeNextCharacter, 28);
-                return;
-            }
-
-            aboutTypingText.classList.remove('is-typing');
-            if (window.sessionStorage) {
-                window.sessionStorage.setItem(aboutIntroSessionKey, 'done');
-            }
-            revealHomeSections();
-        };
-
-        window.setTimeout(typeNextCharacter, 120);
-    });
+    revealAboutSection(revealHomeSections);
 }
 
 runAboutTyping();
@@ -280,13 +238,13 @@ function renderHighlightedLine(line, fileName) {
     return highlightJava(line);
 }
 
-function showCodeModal(fileName, content) {
+function showCodeModal(fileName, content, repoName = 'Portfolio code') {
     if (!codeModal || !codeModalTitle || !codeModalFilebar || !codeModalCode) {
         return;
     }
 
     codeModalTitle.textContent = fileName;
-    codeModalFilebar.textContent = 'API_Testing_Java_Yakov / ' + fileName;
+    codeModalFilebar.textContent = repoName + ' / ' + fileName;
     const codeLines = content.replace(/\r\n/g, '\n').split('\n');
     codeModalCode.innerHTML = codeLines.map((line, index) => {
         const highlightedCode = renderHighlightedLine(line, fileName);
@@ -306,6 +264,9 @@ function showCodeModal(fileName, content) {
     codeModal.classList.remove('is-closing', 'is-visible');
     codeModal.hidden = false;
     document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(() => {
+        codeModal.classList.add('is-visible');
+    });
 }
 
 async function openCodeModal(button) {
@@ -317,21 +278,22 @@ async function openCodeModal(button) {
     }
 
     const fileName = button.dataset.fileLabel || button.querySelector('.repo-file-name')?.textContent || 'File preview';
+    const repoName = button.closest('[data-repo-name]')?.dataset.repoName || 'Portfolio code';
     const requestId = ++activeCodeRequest;
 
-    showCodeModal(fileName, '// Loading file...');
+    showCodeModal(fileName, '// Loading file...', repoName);
 
     if (!filePath && targetId) {
         const source = document.getElementById(targetId);
 
         if (source) {
-            showCodeModal(fileName, source.textContent);
+            showCodeModal(fileName, source.textContent, repoName);
             return;
         }
     }
 
     if (!filePath) {
-        showCodeModal(fileName, '// File preview is unavailable right now.');
+        showCodeModal(fileName, '// File preview is unavailable right now.', repoName);
         return;
     }
 
@@ -349,13 +311,13 @@ async function openCodeModal(button) {
             return;
         }
 
-        showCodeModal(fileName, content);
+        showCodeModal(fileName, content, repoName);
     } catch (error) {
         if (requestId !== activeCodeRequest) {
             return;
         }
 
-        showCodeModal(fileName, '// File preview is unavailable right now.');
+        showCodeModal(fileName, '// File preview is unavailable right now.', repoName);
     }
 }
 
@@ -373,9 +335,14 @@ function closeCodeModal() {
         codeModalCloseTimeout = null;
     }
 
-    codeModal.hidden = true;
-    codeModal.classList.remove('is-closing', 'is-visible');
-    document.body.style.overflow = '';
+    codeModal.classList.remove('is-visible');
+    codeModal.classList.add('is-closing');
+    codeModalCloseTimeout = window.setTimeout(() => {
+        codeModal.hidden = true;
+        codeModal.classList.remove('is-closing');
+        document.body.style.overflow = '';
+        codeModalCloseTimeout = null;
+    }, 220);
 }
 
 document.addEventListener('click', event => {
@@ -403,6 +370,7 @@ const imageModal = document.getElementById('image-modal');
 const imageModalTitle = document.getElementById('image-modal-title');
 const imageModalView = document.getElementById('image-modal-view');
 const imageModalZoomButton = document.querySelector('[data-image-modal-zoom]');
+let imageModalCloseTimeout = null;
 
 document.querySelectorAll('[data-image-modal-target]').forEach(element => {
     if (element.tagName !== 'BUTTON') {
@@ -412,11 +380,17 @@ document.querySelectorAll('[data-image-modal-target]').forEach(element => {
 });
 
 function setImageModalZoom(isZoomed) {
-    if (!imageModal) {
+    if (!imageModal || !imageModalView) {
         return;
     }
 
     imageModal.classList.toggle('is-zoomed', isZoomed);
+    imageModalView.style.width = '';
+
+    if (isZoomed && imageModalView.naturalWidth) {
+        const zoomWidth = Math.round(imageModalView.naturalWidth * 1.2);
+        imageModalView.style.width = zoomWidth + 'px';
+    }
 
     if (imageModalZoomButton) {
         imageModalZoomButton.textContent = isZoomed ? 'Fit' : 'Zoom';
@@ -440,8 +414,16 @@ function openImageModal(button) {
     imageModalView.src = imagePath;
     imageModalView.alt = imageLabel;
     setImageModalZoom(false);
+    if (imageModalCloseTimeout) {
+        clearTimeout(imageModalCloseTimeout);
+        imageModalCloseTimeout = null;
+    }
+    imageModal.classList.remove('is-visible');
     imageModal.hidden = false;
     document.body.style.overflow = 'hidden';
+    window.requestAnimationFrame(() => {
+        imageModal.classList.add('is-visible');
+    });
 }
 
 function closeImageModal() {
@@ -449,13 +431,17 @@ function closeImageModal() {
         return;
     }
 
-    imageModal.hidden = true;
+    imageModal.classList.remove('is-visible');
     setImageModalZoom(false);
-    if (imageModalView) {
-        imageModalView.src = '';
-        imageModalView.alt = '';
-    }
-    document.body.style.overflow = '';
+    imageModalCloseTimeout = window.setTimeout(() => {
+        imageModal.hidden = true;
+        if (imageModalView) {
+            imageModalView.src = '';
+            imageModalView.alt = '';
+        }
+        document.body.style.overflow = '';
+        imageModalCloseTimeout = null;
+    }, 220);
 }
 
 document.addEventListener('click', event => {
